@@ -23,7 +23,7 @@ describe('List.vue', () => {
   // dependencies and becomes difficult to run in isolation. We also have a few
   // side-effects: the test runner could timeout; the SSE could emit
   // undesirable data.
-  it('intractable updates to state', (done) => {
+  it.skip('intractable updates to state', (done) => {
     // Stub our CONNECT action like we did in Reverse.spec
     sinon.stub(testOptions.actions, 'CONNECT', ({ commit }) => {
       api.once('event', (event) => { commit('ADD_ITEM', event); });

@@ -1,16 +1,19 @@
 <template>
   <div id="app">
-    <simple />
+    <reverse />
+    <list />
   </div>
 </template>
 
 <script>
-import Simple from './components/Simple';
+import Reverse from './components/Reverse';
+import List from './components/List';
 
 export default {
   name: 'app',
   components: {
-    Simple,
+    Reverse,
+    List,
   },
 };
 </script>
@@ -23,5 +26,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+ul {
+  list-style: none;
 }
 </style>

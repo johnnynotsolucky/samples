@@ -1,12 +1,12 @@
 <template>
   <div>
-    <a href="#" @click="dispatchFoobar()">{{ value }}</a>
+    <a href="#" @click="reverseValue()">{{ value }}</a>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'simple',
+  name: 'reverse',
   computed: {
     value() {
       return this.$store.state.value;

@@ -40,18 +40,16 @@ describe('Reverse.vue', () => {
     });
     // Group our assertions for readability
     function assertions() {
-      try {
-        assert.equal(this.value, 'oof');
-        assert.equal(this.$el.querySelector('a').textContent, 'oof');
-        done();
-      } catch (err) { // Failed assertions cause an unhandled promise error
-        done(err); // Tell mocha what the actual error was
-      }
+      assert.equal(this.value, 'oof');
+      assert.equal(this.$el.querySelector('a').textContent, 'oof');
+      done();
     }
     // Create our store and include the stubbed methods.
     const stubbedStore = new Vuex.Store(testOptions);
     const updated = function updated() {
-      Vue.nextTick(assertions.bind(this));
+      Vue.nextTick()
+        .then(assertions.bind(this))
+        .catch(done); // Failed assertions can be caught in the promise
     };
     // With object destructuring, we can easily merge our required mock
     // functionality into the component we want to test.

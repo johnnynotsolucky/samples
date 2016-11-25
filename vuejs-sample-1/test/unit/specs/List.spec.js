@@ -31,19 +31,17 @@ describe('List.vue', () => {
     });
     // Group our assertions for readability
     function assertions() {
-      try {
-        assert.equal(this.items.length, 1); // We know one item should exist
-        // We cannot assert against the value of the item
-        // The <li /> element should correlate the previous test
-        assert.equal(this.$el.querySelectorAll('ul > li').length, 1);
-        done();
-      } catch (err) { // Failed assertions cause an unhandled promise error
-        done(err); // Tell mocha what the actual error was
-      }
+      assert.equal(this.items.length, 1); // We know one item should exist
+      // We cannot assert against the value of the item
+      // The <li /> element should correlate the previous test
+      assert.equal(this.$el.querySelectorAll('ul > li').length, 1);
+      done();
     }
     const stubbedStore = new Vuex.Store(testOptions);
     const updated = function updated() {
-      Vue.nextTick(assertions.bind(this));
+      Vue.nextTick()
+        .then(assertions.bind(this))
+        .catch(done);
     };
     const Component = Vue.extend({ ...List, store: stubbedStore, updated });
     new Component().$mount(); // eslint-disable-line no-new
@@ -67,22 +65,20 @@ describe('List.vue', () => {
     });
     // Group our assertions for readability
     function assertions() {
-      try {
-        assert.equal(this.items.length, 1); // We know one item should exist
-        assert.equal(this.items[0], 'foobar'); // That item should be 'foobar'
-        // The <li /> element should correlate the previous tests
-        assert.equal(this.$el.querySelectorAll('ul > li').length, 1);
-        assert.match( // Generated <li /> text is wrapped with whitespace, test for it
-          this.$el.querySelector('ul > li').textContent,
-          /^\s*foobar\s*$/);
-        done();
-      } catch (err) { // Failed assertions cause an unhandled promise error
-        done(err); // Tell mocha what the actual error was
-      }
+      assert.equal(this.items.length, 1); // We know one item should exist
+      assert.equal(this.items[0], 'foobar'); // That item should be 'foobar'
+      // The <li /> element should correlate the previous tests
+      assert.equal(this.$el.querySelectorAll('ul > li').length, 1);
+      assert.match( // Generated <li /> text is wrapped with whitespace, test for it
+        this.$el.querySelector('ul > li').textContent,
+        /^\s*foobar\s*$/);
+      done();
     }
     const stubbedStore = new Vuex.Store(testOptions);
     const updated = function updated() {
-      Vue.nextTick(assertions.bind(this));
+      Vue.nextTick()
+        .then(assertions.bind(this))
+        .catch(done);
     };
     const Component = Vue.extend({ ...List, store: stubbedStore, updated });
     new Component().$mount(); // eslint-disable-line no-new

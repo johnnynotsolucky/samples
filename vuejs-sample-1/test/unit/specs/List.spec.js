@@ -3,16 +3,11 @@ import Vuex from 'vuex';
 import _ from 'lodash';
 import List from 'src/components/List';
 import { options } from 'src/store';
-import Api from 'src/store/api';
 
 describe('List.vue', () => {
   let testOptions;
-  let api;
 
   beforeEach(() => {
-    // Another option is to instantiate Api once in the before() hook, and
-    // restore the stub in the beforeEach() hook
-    api = new Api();
     // Clone the default store options so we can ensure clean state
     testOptions = _.cloneDeep(options);
   });
@@ -24,11 +19,6 @@ describe('List.vue', () => {
   // side-effects: the test runner could timeout; the SSE could emit
   // undesirable data.
   it.skip('intractable updates to state', (done) => {
-    // Stub our CONNECT action like we did in Reverse.spec
-    sinon.stub(testOptions.actions, 'CONNECT', ({ commit }) => {
-      api.once('event', (event) => { commit('ADD_ITEM', event); });
-      api.connect(); // We're connecting to the real api
-    });
     // Group our assertions for readability
     function assertions() {
       assert.equal(this.items.length, 1); // We know one item should exist
@@ -51,17 +41,12 @@ describe('List.vue', () => {
   // listens for events from the fake event stream. This gives us full control
   // over emitted data, and mitigates uncontrollable dependencies.
   it('dependable updates to state', (done) => {
-    // First we stub relevant methods in our API
-    sinon.stub(api, 'fakeSse', function fakeSse() {
-      setTimeout(() => { this.emit('event', 'foobar'); }, 25);
-    });
-    // Then we stub our CONNECT action to make sure we're listening to the
+    // We stub our CONNECT action to make sure we're listening to the
     // correct EventEmitter
     sinon.stub(testOptions.actions, 'CONNECT', ({ commit }) => {
-      api.once('event', (event) => {
-        commit('ADD_ITEM', event);
-      });
-      api.connect();
+      setTimeout(() => {
+        commit('ADD_ITEM', 'foobar');
+      }, 25);
     });
     // Group our assertions for readability
     function assertions() {

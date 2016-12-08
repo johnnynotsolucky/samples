@@ -12,9 +12,8 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
-    "upssert": "^0.1.9"
   },
   "devDependencies": {
-    "upssert": "^0.1.8"
+    "upssert": "^0.1.9"
   }
 }

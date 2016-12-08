@@ -1,0 +1,45 @@
+{
+  "name": "Create new Item",
+  "tests": [
+    {
+      "name": "Authenticate",
+      "id": "auth",
+      "request": {
+        "url": "http://localhost:8080/auth-token",
+        "method": "POST",
+        "headers": {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        "data": "username=user&password=passwd"
+      }
+    }, {
+      "name": "Create Item",
+      "requires": ["auth"],
+      "request": {
+        "url": "http://localhost:8080/items",
+        "method": "POST",
+        "headers": {
+          "Authorization": "Token {{auth.body.auth-token}}",
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        "data": "name=foobar"
+      }
+    }, {
+      "name": "Get Item",
+      "requires": ["auth", "test2"],
+      "request": {
+        "url": "http://localhost:8080{{& test2.body.id}}",
+        "headers": {
+          "Authorization": "Token {{auth.body.auth-token}}"
+        }
+      },
+      "response": {
+        "status-code": {
+          "equal": 200
+        },
+        "body.id": "^/items/[0-9]+",
+        "body.name": "foobar"
+      }
+    }
+  ]
+}

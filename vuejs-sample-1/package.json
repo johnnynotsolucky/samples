@@ -2,7 +2,7 @@
   "name": "vuejs-sample-1",
   "version": "1.0.0",
   "description": "VueJS Sample",
-  "author": "Tyrone T. <tyronetudehope@gmail.com>",
+  "author": "Tyrone Tudehope",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",

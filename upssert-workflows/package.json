@@ -1,0 +1,20 @@
+{
+  "name": "upssert-workflows",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "static": "upssert static-test.json",
+    "dynamic": "upssert dynamic-test.json"
+  },
+  "author": "Tyrone Tudehope",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "upssert": "^0.1.9"
+  },
+  "devDependencies": {
+    "upssert": "^0.1.8"
+  }
+}

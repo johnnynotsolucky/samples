@@ -6,6 +6,11 @@ const data = [];
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use((req, res, next) => {
+  console.log(req.method, req.path);
+  next();
+});
+
 app.post('/auth-token', (req, res) => {
   if (req.body && req.body.username === 'user' && req.body.password === 'passwd') {
     res.send({ 'auth-token': 'secret' });
@@ -24,6 +29,7 @@ const authenticated = (req) => {
 app.post('/items', (req, res) => {
   if (authenticated(req) === true) {
     const item = { id: data.length + 1, name: req.body.name };
+    console.log(item);
     data.push(item);
     res.send({ id: `/items/${item.id}` });
   } else {

@@ -1,5 +1,5 @@
 {
-  "name": "Create new Item",
+  "name": "Get an item",
   "tests": [
     {
       "name": "Authenticate",
@@ -13,7 +13,7 @@
         "data": "username=user&password=passwd"
       }
     }, {
-      "name": "Create Item",
+      "name": "Create",
       "requires": ["auth"],
       "request": {
         "url": "http://localhost:8080/items",
@@ -25,7 +25,7 @@
         "data": "name=foobar"
       }
     }, {
-      "name": "Get Item",
+      "name": "Retrieve",
       "requires": ["auth", "test2"],
       "request": {
         "url": "http://localhost:8080{{& test2.body.id}}",
@@ -34,9 +34,6 @@
         }
       },
       "response": {
-        "status-code": {
-          "equal": 200
-        },
         "body.id": "^/items/[0-9]+",
         "body.name": "foobar"
       }

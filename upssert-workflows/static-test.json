@@ -1,24 +1,8 @@
 {
-  "name": "Create new Item",
+  "name": "Create new item",
   "tests": [
     {
-      "name": "Authenticate",
-      "request": {
-        "url": "http://localhost:8080/auth-token",
-        "method": "POST",
-        "headers": {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        "data": "username=user&password=passwd"
-      },
-      "response": {
-        "content-type": "application/json",
-        "status-code": {
-          "equal": 200
-        }
-      }
-    }, {
-      "name": "Create Item",
+      "name": "POST /items",
       "request": {
         "url": "http://localhost:8080/items",
         "method": "POST",
@@ -29,10 +13,6 @@
         "data": "name=foobar"
       },
       "response": {
-        "content-type": "application/json",
-        "status-code": {
-          "equal": 200
-        },
         "body.id": "/items/1"
       }
     }

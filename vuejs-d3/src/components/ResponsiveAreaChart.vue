@@ -1,11 +1,13 @@
 <template>
-  <svg @mousemove="mouseover" :width="width" :height="height">
-    <g :style="{transform: `translate(${margin.left}px, ${margin.top}px)`}">
-      <path class="area" :d="paths.area" />
-      <path class="line" :d="paths.line" />
-      <path class="selector" :d="paths.selector" />
-    </g>
-  </svg>
+  <div>
+    <svg @mousemove="mouseover" :width="width" :height="height">
+      <g :style="{transform: `translate(${margin.left}px, ${margin.top}px)`}">
+        <path class="area" :d="paths.area" />
+        <path class="line" :d="paths.line" />
+        <path class="selector" :d="paths.selector" />
+      </g>
+    </svg>
+  </div>
 </template>
 
 <script>
@@ -18,14 +20,6 @@ const props = {
     type: Array,
     default: () => [],
   },
-  width: {
-    type: Number,
-    default: 0,
-  },
-  height: {
-    type: Number,
-    default: 0,
-  },
   margin: {
     type: Object,
     default: () => ({
@@ -35,7 +29,7 @@ const props = {
       bottom: 10,
     }),
   },
-  max: {
+  ceil: {
     type: Number,
     default: 100,
   },
@@ -46,6 +40,8 @@ export default {
   props,
   data() {
     return {
+      width: 0,
+      height: 0,
       paths: {
         area: '',
         line: '',
@@ -61,14 +57,43 @@ export default {
     };
   },
   computed: {
-    actualDims() {
+    padded() {
       const width = this.width - this.margin.left - this.margin.right;
       const height = this.height - this.margin.top - this.margin.bottom;
       return { width, height };
     },
   },
+  mounted() {
+    window.addEventListener('resize', this.onResize);
+    this.onResize();
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.onResize);
+  },
   watch: {
     data: function dataChanged(newData, oldData) {
+      this.tweenData(newData, oldData);
+    },
+    width: function widthChanged() {
+      this.initialize();
+      this.update();
+    },
+  },
+  methods: {
+    onResize() {
+      this.width = this.$el.offsetWidth;
+      this.height = this.$el.offsetHeight;
+    },
+    createArea: d3.area().x(d => d.x).y0(d => d.max).y1(d => d.y),
+    createLine: d3.line().x(d => d.x).y(d => d.y),
+    createValueSelector: d3.area().x(d => d.x).y0(d => d.max).y1(0),
+    initialize() {
+      this.scaled.x = d3.scaleLinear().range([0, this.padded.width]);
+      this.scaled.y = d3.scaleLinear().range([this.padded.height, 0]);
+      d3.axisLeft().scale(this.scaled.x);
+      d3.axisBottom().scale(this.scaled.y);
+    },
+    tweenData(newData, oldData) {
       const vm = this;
       function animate(time) {
         requestAnimationFrame(animate);
@@ -79,37 +104,14 @@ export default {
         .to(newData, 500)
         .onUpdate(function onUpdate() {
           vm.animatedData = this;
-          vm.render();
+          vm.update();
         })
         .start();
       animate();
     },
-    width: function widthChanged() {
-      this.initialize();
-      this.render();
-    },
-  },
-  methods: {
-    createArea: d3.area()
-      .x(d => d.x)
-      .y0(d => d.max)
-      .y1(d => d.y),
-    createLine: d3.line()
-      .x(d => d.x)
-      .y(d => d.y),
-    createValueSelector: d3.area()
-      .x(d => d.x)
-      .y0(d => d.max)
-      .y1(0),
-    initialize() {
-      this.scaled.x = d3.scaleLinear().range([0, this.actualDims.width]);
-      this.scaled.y = d3.scaleLinear().range([this.actualDims.height, 0]);
-      d3.axisLeft().scale(this.scaled.x);
-      d3.axisBottom().scale(this.scaled.y);
-    },
-    render() {
+    update() {
       this.scaled.x.domain(d3.extent(this.data, (d, i) => i));
-      this.scaled.y.domain([0, this.max]);
+      this.scaled.y.domain([0, this.ceil]);
       this.points = [];
       for (const [i, d] of this.animatedData.entries()) {
         this.points.push({

@@ -1,0 +1,2 @@
+webpackJsonp([0],{15:function(module,exports){module.exports={render:function(){with(this)return _c("svg",{attrs:{xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 400 400"}},[_c("path",{attrs:{d:"M237.417 86.655l-30.226 52.352-30.225-52.352H76.311l130.88 226.69 130.88-226.69z",fill:"#4dba87"}}),_c("path",{attrs:{d:"M237.417 86.655l-30.226 52.352-30.225-52.352h-48.303l78.528 136.014L285.72 86.655z",fill:"#435466"}})])}}}});
+//# sourceMappingURL=0.52fc7c020738b6c3aedd.js.map

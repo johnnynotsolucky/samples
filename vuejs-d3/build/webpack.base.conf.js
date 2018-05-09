@@ -90,5 +90,9 @@ module.exports = {
         browsers: ['last 2 versions']
       })
     ]
+  },
+  node: {
+    child_process: 'empty',
+    fs: 'empty',
   }
 }

@@ -5,7 +5,9 @@ const data = [99, 71, 78, 25, 36, 92];
 
 export default {
   name: 'non-vue-line-chart',
-  template: '<div></div>',
+  render (h) {
+    return h('div')
+  },
   mounted() {
     const svg = d3.select(this.$el)
       .append('svg')
@@ -33,7 +35,7 @@ export default {
 
 <style lang="sass">
 svg
-  margin: 25px;
+  margin: 25px
   path
     fill: none
     stroke: #76BF8A
